@@ -196,7 +196,30 @@
     <footer>
         <p>&copy; 2024 咖啡香. 版權所有.</p>
     </footer>
+
+    <!-- 購物車彈窗 -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>購物車</h3>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- 購物車項目將由 JavaScript 動態添加 -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    總計: <span id="cartTotal">NT$ 0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">結帳</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 確保 script.js 在 checkout.js 之前載入 -->
+    <script src="script.js"></script>
     <script src="checkout.js"></script>
+
     <!-- 訂購成功頁面 -->
     <div class="success-page">
         <div class="success-content">
