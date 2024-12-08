@@ -9,13 +9,13 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     // 添加用戶ID到訂單數據
     req.body.user = req.user.id;
 
-    // 生成訂單編號
+    // 生成訂單編號 (格式: CF + 年月日 + 4位隨機數)
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    req.body.orderNumber = `OD${year}${month}${day}${random}`;
+    req.body.orderNumber = `CF${year}${month}${day}${random}`;
 
     // 確保所有必要欄位都存在
     const orderData = {
