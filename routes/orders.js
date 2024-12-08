@@ -3,19 +3,16 @@ const router = express.Router();
 const { protect } = require('../middleware/auth');
 const {
     createOrder,
-    getOrderById,
     getUserOrders,
-    updateOrderStatus,
-    updatePaymentStatus
+    getOrderById
 } = require('../controllers/orders');
 
-// 所有訂單路由都需要認證
-router.use(protect);
+router.use(protect);  // 所有訂單路由都需要登入
 
-router.post('/', createOrder);
+router.route('/')
+    .post(createOrder);
+
 router.get('/my-orders', getUserOrders);
 router.get('/:id', getOrderById);
-router.put('/:id/status', updateOrderStatus);
-router.put('/:id/payment', updatePaymentStatus);
 
 module.exports = router; 
