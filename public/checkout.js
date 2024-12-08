@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         const data = await response.json();
         console.log('Cart data:', data);
 
-        // 確保我們有正確的數據結構
-        const cartItems = data.data || [];
+        // 使用購物車中的 items 數組
+        const cartItems = data.data.items || [];
 
         // 渲染訂單項目
         renderOrderItems(cartItems);
@@ -67,13 +67,13 @@ function renderOrderItems(items) {
 
     const itemsHTML = items.map(item => `
         <div class="order-item">
-            <img src="${item.image}" alt="${item.name}">
+            <img src="${item.product.images[0]}" alt="${item.product.name}">
             <div class="item-details">
-                <h4>${item.name}</h4>
+                <h4>${item.product.name}</h4>
                 <p>數量: ${item.quantity}</p>
-                <p>單價: NT$ ${item.price}</p>
+                <p>單價: NT$ ${item.product.price}</p>
             </div>
-            <div class="item-total">NT$ ${item.price * item.quantity}</div>
+            <div class="item-total">NT$ ${item.product.price * item.quantity}</div>
         </div>
     `).join('');
 
@@ -82,7 +82,7 @@ function renderOrderItems(items) {
 }
 
 function updateTotals(items) {
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
     const shipping = 60;
     const total = subtotal + shipping;
 
@@ -179,7 +179,7 @@ function updateConfirmationInfo() {
 
 function getPaymentMethodText(value) {
     const methods = {
-        credit: '信用��付款',
+        credit: '信用付款',
         transfer: '銀行轉帳',
         cod: '貨到付款'
     };
