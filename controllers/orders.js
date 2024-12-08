@@ -1,5 +1,4 @@
 const Order = require('../models/Order');
-const Product = require('../models/Product');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 
@@ -7,58 +6,38 @@ const ErrorResponse = require('../utils/errorResponse');
 // @route   POST /api/orders
 // @access  Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-    const {
-        items,
-        shippingAddress,
-        paymentMethod
-    } = req.body;
+    // 添加用戶ID到訂單數據
+    req.body.user = req.user.id;
 
-    if (!items || items.length === 0) {
-        return next(new ErrorResponse('請選擇商品', 400));
-    }
+    // 生成訂單編號
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    req.body.orderNumber = `OD${year}${month}${day}${random}`;
 
-    // 計算訂單金額
-    let subtotal = 0;
-    const orderItems = [];
+    // 確保所有必要欄位都存在
+    const orderData = {
+        orderNumber: req.body.orderNumber,
+        user: req.body.user,
+        items: req.body.items,
+        shippingInfo: {
+            name: req.body.shippingInfo.name,
+            phone: req.body.shippingInfo.phone,
+            email: req.body.shippingInfo.email,
+            address: req.body.shippingInfo.address
+        },
+        paymentMethod: req.body.paymentMethod,
+        totalAmount: req.body.totalAmount,
+        subtotal: req.body.subtotal,
+        shippingFee: req.body.shippingFee || 60,
+        status: 'pending'
+    };
 
-    for (const item of items) {
-        const product = await Product.findById(item.product);
-        if (!product) {
-            return next(new ErrorResponse('商品不存在', 404));
-        }
+    console.log('Creating order with data:', orderData);
 
-        // 檢查庫存
-        if (product.stock < item.quantity) {
-            return next(new ErrorResponse(`商品 ${product.name} 庫存不足`, 400));
-        }
-
-        subtotal += product.price * item.quantity;
-        orderItems.push({
-            product: item.product,
-            quantity: item.quantity,
-            price: product.price
-        });
-
-        // 更新庫存
-        product.stock -= item.quantity;
-        await product.save();
-    }
-
-    const shippingFee = 60; // 固定運費
-    const total = subtotal + shippingFee;
-
-    const order = await Order.create({
-        user: req.user.id,
-        items: orderItems,
-        shippingAddress,
-        paymentMethod,
-        subtotal,
-        shippingFee,
-        total,
-        statusHistory: [{
-            status: 'processing'
-        }]
-    });
+    const order = await Order.create(orderData);
 
     res.status(201).json({
         success: true,

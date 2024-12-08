@@ -226,7 +226,6 @@ function bindOrderSubmit() {
             const total = document.getElementById('sidebarTotal').textContent.replace('NT$ ', '');
 
             const orderData = {
-                orderNumber: generateOrderNumber(),
                 shippingInfo: {
                     name: document.getElementById('name').value,
                     phone: document.getElementById('phone').value,
