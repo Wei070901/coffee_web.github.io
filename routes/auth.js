@@ -1,25 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const {
-    register,
-    login,
-    logout,
-    getProfile,
-    updateProfile,
-    forgotPassword,
-    resetPassword
-} = require('../controllers/auth');
+const { body } = require('express-validator');
+const authController = require('../controllers/authController');
+const { registerValidator } = require('../middleware/validators');
+const validate = require('../middleware/validate');
 
-// 公開路由
-router.post('/register', register);
-router.post('/login', login);
-router.post('/logout', logout);
-router.post('/forgot-password', forgotPassword);
-router.post('/reset-password', resetPassword);
+// 登入驗證規則
+const loginValidator = [
+    body('email')
+        .isEmail()
+        .withMessage('請輸入有效的電子郵件地址'),
+    body('password')
+        .notEmpty()
+        .withMessage('請輸入密碼')
+];
 
-// 需要認證的路由
-router.get('/me', protect, getProfile);
-router.put('/profile', protect, updateProfile);
+// 註冊路由
+router.post('/register', registerValidator, validate, authController.register);
 
-module.exports = router; 
+// 登入路由
+router.post('/login', loginValidator, validate, authController.login);
+
+module.exports = router;

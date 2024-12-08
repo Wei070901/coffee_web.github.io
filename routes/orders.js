@@ -1,21 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const {
-    createOrder,
-    getOrderById,
-    getUserOrders,
-    updateOrderStatus,
-    updatePaymentStatus
-} = require('../controllers/orders');
+const orderController = require('../controllers/orderController');
+const auth = require('../middleware/auth');
 
-// 所有訂單路由都需要認證
-router.use(protect);
+router.get('/', auth, orderController.getOrders);
 
-router.post('/', createOrder);
-router.get('/my-orders', getUserOrders);
-router.get('/:id', getOrderById);
-router.put('/:id/status', updateOrderStatus);
-router.put('/:id/payment', updatePaymentStatus);
+router.get('/:id', auth, orderController.getOrderById);
 
-module.exports = router; 
+router.post('/', auth, orderController.createOrder);
+
+// 更新訂單狀態
+router.patch('/:id/status', auth, orderController.updateOrderStatus);
+
+// 取消訂單
+router.patch('/:id/cancel', auth, orderController.cancelOrder);
+
+module.exports = router;
