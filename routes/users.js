@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const auth = require('../middleware/auth');
+const {
+    getUsers,
+    getUser,
+    updateUser,
+    deleteUser
+} = require('../controllers/userController');
+const { protect, authorize } = require('../middleware/auth');
 
-// 獲取用戶資料
-router.get('/profile', auth, userController.getProfile);
+router.use(protect);
+router.use(authorize('admin'));
 
-// 更新用戶資料
-router.put('/profile', auth, userController.updateProfile);
+router.route('/')
+    .get(getUsers);
 
-// 更改密碼
-router.patch('/password', auth, userController.updatePassword);
+router.route('/:id')
+    .get(getUser)
+    .put(updateUser)
+    .delete(deleteUser);
 
-// 刪除帳號
-router.delete('/account', auth, userController.deleteAccount);
-
-module.exports = router;
+module.exports = router; 

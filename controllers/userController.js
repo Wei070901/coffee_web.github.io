@@ -1,84 +1,58 @@
 const User = require('../models/User');
-const AppError = require('../utils/AppError');
-const catchAsync = require('../utils/catchAsync');
+const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middleware/async');
 
-// 獲取用戶資料
-exports.getProfile = catchAsync(async (req, res) => {
-    const user = await User.findById(req.user.id).select('-password');
-    
+// 獲取所有用戶
+exports.getUsers = asyncHandler(async (req, res, next) => {
+    const users = await User.find();
+
     res.status(200).json({
-        status: 'success',
-        data: {
-            user
-        }
+        success: true,
+        data: users
+    });
+});
+
+// 獲取單個用戶
+exports.getUser = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorResponse(`找不到 ID 為 ${req.params.id} 的用戶`, 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        data: user
     });
 });
 
 // 更新用戶資料
-exports.updateProfile = catchAsync(async (req, res, next) => {
-    // 不允許在此更新密碼
-    if (req.body.password || req.body.passwordConfirm) {
-        return next(new AppError('此路由不用於密碼更新。請使用 /updatePassword', 400));
+exports.updateUser = asyncHandler(async (req, res, next) => {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    if (!user) {
+        return next(new ErrorResponse(`找不到 ID 為 ${req.params.id} 的用戶`, 404));
     }
 
-    // 過濾不允許更新的欄位
-    const filteredBody = filterObj(req.body, 'name', 'email', 'phone');
-
-    const updatedUser = await User.findByIdAndUpdate(
-        req.user.id,
-        filteredBody,
-        {
-            new: true,
-            runValidators: true
-        }
-    ).select('-password');
-
     res.status(200).json({
-        status: 'success',
-        data: {
-            user: updatedUser
-        }
+        success: true,
+        data: user
     });
 });
 
-// 更改密碼
-exports.updatePassword = catchAsync(async (req, res, next) => {
-    const { currentPassword, newPassword, passwordConfirm } = req.body;
+// 刪除用戶
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+    const user = await User.findByIdAndDelete(req.params.id);
 
-    // 1) 獲取用戶
-    const user = await User.findById(req.user.id).select('+password');
-
-    // 2) 檢查當前密碼是否正確
-    if (!(await user.correctPassword(currentPassword, user.password))) {
-        return next(new AppError('當前密碼不正確', 401));
+    if (!user) {
+        return next(new ErrorResponse(`找不到 ID 為 ${req.params.id} 的用戶`, 404));
     }
 
-    // 3) 更新密碼
-    user.password = newPassword;
-    user.passwordConfirm = passwordConfirm;
-    await user.save();
-
     res.status(200).json({
-        status: 'success',
-        message: '密碼更新成功'
+        success: true,
+        data: {}
     });
-});
-
-// 刪除帳號
-exports.deleteAccount = catchAsync(async (req, res, next) => {
-    await User.findByIdAndUpdate(req.user.id, { active: false });
-
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
-});
-
-// 輔助函數：過濾對象屬性
-const filterObj = (obj, ...allowedFields) => {
-    const newObj = {};
-    Object.keys(obj).forEach(el => {
-        if (allowedFields.includes(el)) newObj[el] = obj[el];
-    });
-    return newObj;
-};
+}); 

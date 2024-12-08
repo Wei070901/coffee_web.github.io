@@ -7,11 +7,13 @@ const {
     removeFromWishlist
 } = require('../controllers/wishlist');
 
+router.use(protect);
+
 router.route('/')
-    .get(protect, getWishlist);
+    .get(getWishlist)
+    .post(addToWishlist);
 
 router.route('/:productId')
-    .post(protect, addToWishlist)
-    .delete(protect, removeFromWishlist);
+    .delete(removeFromWishlist);
 
 module.exports = router; 

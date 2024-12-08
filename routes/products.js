@@ -1,24 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const productController = require('../controllers/productController');
-const auth = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
+const {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getRelatedProducts
+} = require('../controllers/products');
 
-// GET 所有商品
-router.get('/', productController.getAllProducts);  // 改為 getAllProducts
+// 公開路由
+router.route('/')
+    .get(getProducts)
+    .post(protect, authorize('admin'), createProduct);
 
-// GET 單個商品
-router.get('/:id', productController.getProductById);
+router.route('/:id')
+    .get(getProductById)
+    .put(protect, authorize('admin'), updateProduct)
+    .delete(protect, authorize('admin'), deleteProduct);
 
-// GET 根據類別獲取商品
-router.get('/category/:category', productController.getProductsByCategory);
+// 獲取相關商品
+router.get('/related/:id', getRelatedProducts);
 
-// POST 新增商品
-router.post('/', auth, productController.createProduct);
-
-// PUT 更新商品
-router.put('/:id', auth, productController.updateProduct);
-
-// DELETE 刪除商品
-router.delete('/:id', auth, productController.deleteProduct);
-
-module.exports = router;
+module.exports = router; 

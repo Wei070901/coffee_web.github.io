@@ -3,51 +3,48 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, '商品名稱為必填'],
-        trim: true
+        required: true
     },
     price: {
         type: Number,
-        required: [true, '商品價格為必填'],
-        min: [0, '價格不能小於0']
+        required: true
     },
     description: {
         type: String,
-        required: [true, '商品描述為必填']
-    },
-    image: {
-        type: String,
-        required: [true, '商品圖片為必填']
+        required: true
     },
     category: {
         type: String,
-        required: [true, '商品類別為必填'],
-        enum: ['咖啡豆', '濾掛包', '咖啡器具', '禮盒組']
+        enum: ['light', 'medium', 'dark'],
+        required: true
     },
     roastLevel: {
         type: String,
-        enum: ['淺焙', '中焙', '中深焙', '深焙'],
-        required: function() {
-            return this.category === '咖啡豆' || this.category === '濾掛包';
-        }
+        required: true
     },
-    features: [{
+    images: [{
         type: String,
-        trim: true
+        required: true
     }],
-    brewingGuide: {
-        type: Map,
-        of: String
-    },
+    features: [{
+        type: String
+    }],
+    brewingGuide: [{
+        type: String
+    }],
     stock: {
         type: Number,
-        required: [true, '庫存數量為必填'],
-        min: [0, '庫存不能小於0']
+        required: true,
+        default: 0
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 }, {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    timestamps: true
 });
 
-module.exports = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product; 
