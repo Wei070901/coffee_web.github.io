@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
-const orderSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+const OrderSchema = new mongoose.Schema({
     orderNumber: {
         type: String,
         required: true,
         unique: true
     },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
+    },
     items: [{
         product: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.ObjectId,
             ref: 'Product',
             required: true
         },
@@ -27,28 +27,32 @@ const orderSchema = new mongoose.Schema({
             required: true
         }
     }],
-    shippingAddress: {
-        name: String,
-        phone: String,
-        address: String,
-        email: String
+    shippingInfo: {
+        name: {
+            type: String,
+            required: true
+        },
+        phone: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        address: {
+            type: String,
+            required: true
+        }
     },
     paymentMethod: {
         type: String,
         required: true,
         enum: ['credit', 'transfer', 'cod']
     },
-    paymentStatus: {
-        type: String,
-        required: true,
-        enum: ['pending', 'paid', 'failed'],
-        default: 'pending'
-    },
-    orderStatus: {
-        type: String,
-        required: true,
-        enum: ['processing', 'shipped', 'delivered', 'cancelled'],
-        default: 'processing'
+    totalAmount: {
+        type: Number,
+        required: true
     },
     subtotal: {
         type: Number,
@@ -59,37 +63,29 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: 60
     },
-    total: {
-        type: Number,
-        required: true
+    status: {
+        type: String,
+        required: true,
+        enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending'
     },
-    statusHistory: [{
-        status: {
-            type: String,
-            required: true
-        },
-        timestamp: {
-            type: Date,
-            default: Date.now
-        }
-    }]
-}, {
-    timestamps: true
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-// 生成訂單編號
-orderSchema.pre('save', async function(next) {
-    if (this.isNew) {
+// 在保存前生成訂單編號
+OrderSchema.pre('save', async function(next) {
+    if (!this.orderNumber) {
         const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear().toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        this.orderNumber = `${year}${month}${day}${random}`;
+        this.orderNumber = `OD${year}${month}${day}${random}`;
     }
     next();
 });
 
-const Order = mongoose.model('Order', orderSchema);
-
-module.exports = Order; 
+module.exports = mongoose.model('Order', OrderSchema); 
