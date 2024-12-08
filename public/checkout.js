@@ -197,6 +197,21 @@ function bindOrderSubmit() {
                 return;
             }
 
+            // 獲取購物車資料
+            const cartResponse = await fetch('/api/cart', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            const cartData = await cartResponse.json();
+            const cartItems = cartData.data.items;
+
+            if (!cartItems || cartItems.length === 0) {
+                showNotification('購物車是空的，請選擇商品', 'error');
+                return;
+            }
+
             // 獲取購物車總金額
             const subtotal = document.getElementById('sidebarSubtotal').textContent.replace('NT$ ', '');
             const total = document.getElementById('sidebarTotal').textContent.replace('NT$ ', '');
@@ -212,10 +227,15 @@ function bindOrderSubmit() {
                 totalAmount: parseFloat(total),
                 subtotal: parseFloat(subtotal),
                 shippingFee: 60,
-                status: 'pending'
+                status: 'pending',
+                items: cartItems.map(item => ({
+                    product: item.product._id,
+                    quantity: item.quantity,
+                    price: item.product.price
+                }))
             };
 
-            console.log('Submitting order:', orderData);  // 添加這行來檢查數據
+            console.log('Submitting order:', orderData);
 
             const response = await fetch('/api/orders', {
                 method: 'POST',
@@ -227,7 +247,7 @@ function bindOrderSubmit() {
             });
 
             const data = await response.json();
-            console.log('Order response:', data);  // 添加這行來檢查響應
+            console.log('Order response:', data);
 
             if (data.success) {
                 // 顯示成功頁面
