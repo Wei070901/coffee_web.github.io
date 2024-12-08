@@ -261,7 +261,7 @@ function bindOrderSubmit() {
             if (data.success) {
                 // 顯示成功頁面
                 document.querySelector('.success-page').style.display = 'flex';
-                document.getElementById('orderNumber').textContent = data.data._id;
+                document.getElementById('orderNumber').textContent = data.data.orderNumber;
                 document.getElementById('orderAmount').textContent = `NT$ ${total}`;
 
                 // 清空購物車
