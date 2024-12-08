@@ -186,6 +186,15 @@ function getPaymentMethodText(value) {
     return methods[value] || value;
 }
 
+function generateOrderNumber() {
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    return `OD${year}${month}${day}${random}`;
+}
+
 function bindOrderSubmit() {
     const submitButton = document.querySelector('.submit-order');
     submitButton.addEventListener('click', async () => {
@@ -217,6 +226,7 @@ function bindOrderSubmit() {
             const total = document.getElementById('sidebarTotal').textContent.replace('NT$ ', '');
 
             const orderData = {
+                orderNumber: generateOrderNumber(),
                 shippingInfo: {
                     name: document.getElementById('name').value,
                     phone: document.getElementById('phone').value,
