@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品詳細 - 咖啡香</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <!-- 與其他頁面相同的導航欄 -->
+        <nav>
+            <div class="logo">
+                <a href="index.html">咖啡香</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首頁</a></li>
+                    <li><a href="products.html">商品</a></li>
+                    <li><a href="about.html">關於我們</a></li>
+                    <li><a href="contact.html">聯絡我們</a></li>
+                </ul>
+            </div>
+            <div class="nav-icons">
+                <div class="member-icon">
+                    <a href="member.html"><i class="fas fa-user"></i></a>
+                </div>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="product-detail-page">
+        <div class="product-detail-container">
+            <div class="product-images">
+                <div class="main-image">
+                    <img id="mainImage" src="" alt="">
+                </div>
+                <div class="image-thumbnails" id="imageThumbnails">
+                    <!-- 縮圖將由 JavaScript 動態添加 -->
+                </div>
+            </div>
+            
+            <div class="product-info">
+                <h1 id="productName"></h1>
+                <div class="product-meta">
+                    <span class="roast-level" id="roastLevel"></span>
+                    <span class="product-id">商品編號: <span id="productId"></span></span>
+                </div>
+                <div class="product-price">
+                    <span id="productPrice"></span>
+                </div>
+                <div class="product-description" id="productDescription"></div>
+                
+                <div class="purchase-options">
+                    <div class="quantity-selector">
+                        <button class="quantity-btn minus">-</button>
+                        <input type="number" id="quantity" value="1" min="1">
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" id="addToCartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        加入購物車
+                    </button>
+                    <button class="add-to-wishlist-btn" id="addToWishlistBtn">
+                        <i class="fas fa-heart"></i>
+                        加入收藏
+                    </button>
+                </div>
+
+                <div class="product-details">
+                    <h2>商品特色</h2>
+                    <div class="product-features" id="productFeatures">
+                        <!-- 特色將由 JavaScript 動態添加 -->
+                    </div>
+                    
+                    <h2>沖煮建議</h2>
+                    <div class="brewing-guide" id="brewingGuide">
+                        <!-- 沖煮建議將由 JavaScript 動態添加 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相關商品推薦 -->
+        <div class="related-products">
+            <h2>相關商品推薦</h2>
+            <div class="related-products-grid" id="relatedProducts">
+                <!-- 相關商品將由 JavaScript 動態添加 -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 咖啡香. 版權所有.</p>
+    </footer>
+
+    <!-- 購物車彈窗 -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>購物車</h3>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- 購物車項目將由 JavaScript 動態添加 -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    總計: <span id="cartTotal">NT$ 0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">結帳</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="product-detail.js"></script>
+</body>
+</html> 

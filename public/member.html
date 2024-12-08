@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員中心 - 咖啡香</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- 左側 Logo -->
+            <div class="logo">
+                <a href="index.html">咖啡香</a>
+            </div>
+        
+            <!-- 手機版漢堡選單 -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        
+            <!-- 中間導航連結 -->
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首頁</a></li>
+                    <li><a href="products.html">商品</a></li>
+                    <li><a href="about.html">關於我們</a></li>
+                    <li><a href="contact.html">聯絡我們</a></li>
+                </ul>
+            </div>
+        
+            <!-- 右側功能圖標 -->
+            <div class="nav-icons">
+                <div class="member-icon">
+                    <a href="member.html">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="member-page">
+        <div class="member-container">
+            <!-- 會員中心儀表板 -->
+            <div class="member-dashboard" id="memberDashboard" style="display: none;">
+                <div class="dashboard-header">
+                    <div class="member-header">
+                        <h2>會員中心</h2>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> 登出
+                        </button>
+                    </div>
+                    <div class="member-info">
+                        <img src="https://via.placeholder.com/100" alt="會員頭像" class="member-avatar">
+                        <div class="member-details">
+                            <h3 id="memberName">用戶名稱</h3>
+                            <p>會員等級: <span id="memberLevel">一般會員</span></p>
+                            <p>會員點數: <span id="memberPoints">0</span> 點</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 功能選單 -->
+                <div class="member-options">
+                    <div class="member-option active" data-target="orderHistory">訂單記錄</div>
+                    <div class="member-option" data-target="wishlist">收藏清單</div>
+                    <div class="member-option" data-target="profile">個人資料</div>
+                    <div class="member-option" data-target="points">點數管理</div>
+                </div>
+
+                <!-- 訂單記錄 -->
+                <div class="dashboard-content" id="orderHistory">
+                    <h3>訂單記錄</h3>
+                    <div class="order-list">
+                        <!-- 訂單項目將由 JavaScript 動態添加 -->
+                    </div>
+                </div>
+
+                <!-- 收藏清單 -->
+                <div class="dashboard-content" id="wishlist" style="display: none;">
+                    <h3>收藏清單</h3>
+                    <div class="wishlist-grid">
+                        <!-- 收藏商品將由 JavaScript 動態添加 -->
+                    </div>
+                </div>
+
+                <!-- 個人資料 -->
+                <div class="dashboard-content" id="profile" style="display: none;">
+                    <h3>個人資料</h3>
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-group">
+                            <label for="profileName">姓名</label>
+                            <input type="text" id="profileName" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">電子郵件</label>
+                            <input type="email" id="profileEmail" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePhone">手機號碼</label>
+                            <input type="tel" id="profilePhone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileAddress">地址</label>
+                            <input type="text" id="profileAddress" name="address">
+                        </div>
+                        <button type="submit" class="submit-btn">更新資料</button>
+                    </form>
+                </div>
+
+                <!-- 點數管理 -->
+                <div class="dashboard-content" id="points" style="display: none;">
+                    <h3>點數管理</h3>
+                    <div class="points-summary">
+                        <div class="points-card">
+                            <h4>可用點數</h4>
+                            <p class="points-number" id="availablePoints">0</p>
+                        </div>
+                        <div class="points-card">
+                            <h4>已使用點數</h4>
+                            <p class="points-number" id="usedPoints">0</p>
+                        </div>
+                    </div>
+                    <div class="points-history">
+                        <h4>點數紀錄</h4>
+                        <div class="points-list">
+                            <!-- 點數紀錄將由 JavaScript 動態添加 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 登入表單 -->
+            <div class="form-container" id="loginForm">
+                <h2>會員登入</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="loginEmail">電子郵件</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">密碼</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <div class="form-options">
+                        <label>
+                            <input type="checkbox" id="rememberMe">
+                            記住我
+                        </label>
+                        <a href="#" class="forgot-password">忘記密碼？</a>
+                    </div>
+                    <button type="submit" class="submit-btn">登入</button>
+                </form>
+                <p class="switch-form">
+                    還不是會員？<a href="#" id="showRegister">立即註冊</a>
+                </p>
+            </div>
+
+            <!-- 註冊表單 -->
+            <div class="form-container" id="registerForm" style="display: none;">
+                <h2>會員註冊</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="registerName">姓名</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">電子郵件</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">密碼</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">確認密碼</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">手機號碼</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <button type="submit" class="submit-btn">註冊</button>
+                </form>
+                <p class="switch-form">
+                    已經是會員？<a href="#" id="showLogin">立即登入</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 咖啡香. 版權所有.</p>
+    </footer>
+
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>購物車</h3>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- 購物車項目將由 JavaScript 動態添加 -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    總計: <span id="cartTotal">NT$ 0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">結帳</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="member.js"></script>
+</body>
+</html> 

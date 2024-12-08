@@ -1,0 +1,68 @@
+[
+    {
+        "name": "衣索比亞耶加雪菲",
+        "price": 450,
+        "description": "花香調，帶有茉莉花香與柑橘風味",
+        "category": "light",
+        "roastLevel": "淺焙",
+        "images": ["https://via.placeholder.com/300"],
+        "features": [
+            "產地：衣索比亞耶加雪菲產區",
+            "海拔：1,800-2,200公尺",
+            "處理法：水洗處理",
+            "風味：茉莉花香、柑橘、蜂蜜"
+        ],
+        "brewingGuide": [
+            "建議沖煮比例：1:15",
+            "水溫：88-92°C",
+            "研磨度：中細研磨",
+            "適合沖煮方式：手沖、濾掛"
+        ],
+        "stock": 100,
+        "isActive": true
+    },
+    {
+        "name": "哥倫比亞supremo",
+        "price": 400,
+        "description": "均衡醇厚，具有堅果與焦糖香",
+        "category": "medium",
+        "roastLevel": "中焙",
+        "images": ["https://via.placeholder.com/300"],
+        "features": [
+            "產地：哥倫比亞 supremo 等級",
+            "海拔：1,500-2,000公尺",
+            "處理法：水洗處理",
+            "風味：堅果、焦糖、可可"
+        ],
+        "brewingGuide": [
+            "建議沖煮比例：1:16",
+            "水溫：90-94°C",
+            "研磨度：中度研磨",
+            "適合沖煮方式：手沖、義式濃縮"
+        ],
+        "stock": 80,
+        "isActive": true
+    },
+    {
+        "name": "瓜地馬拉安提瓜",
+        "price": 480,
+        "description": "濃郁香醇，帶有巧克力味",
+        "category": "dark",
+        "roastLevel": "深焙",
+        "images": ["https://via.placeholder.com/300"],
+        "features": [
+            "產地：瓜地馬拉安提瓜產區",
+            "海拔：1,500-1,700公尺",
+            "處理法：水洗處理",
+            "風味：巧克力、焦糖、柑橘"
+        ],
+        "brewingGuide": [
+            "建議沖煮比例：1:15",
+            "水溫：92-96°C",
+            "研磨度：中粗研磨",
+            "適合沖煮方式：手沖、法壓"
+        ],
+        "stock": 60,
+        "isActive": true
+    }
+] 
