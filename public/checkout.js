@@ -190,13 +190,32 @@ function bindOrderSubmit() {
     const submitButton = document.querySelector('.submit-order');
     submitButton.addEventListener('click', async () => {
         try {
+            // 檢查付款方式是否已選擇
+            const paymentMethod = document.querySelector('input[name="payment"]:checked');
+            if (!paymentMethod) {
+                showNotification('請選擇付款方式', 'error');
+                return;
+            }
+
+            // 獲取購物車總金額
+            const subtotal = document.getElementById('sidebarSubtotal').textContent.replace('NT$ ', '');
+            const total = document.getElementById('sidebarTotal').textContent.replace('NT$ ', '');
+
             const orderData = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                paymentMethod: document.querySelector('input[name="payment"]:checked').value
+                shippingInfo: {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    address: document.getElementById('address').value
+                },
+                paymentMethod: paymentMethod.value,
+                totalAmount: parseFloat(total),
+                subtotal: parseFloat(subtotal),
+                shippingFee: 60,
+                status: 'pending'
             };
+
+            console.log('Submitting order:', orderData);  // 添加這行來檢查數據
 
             const response = await fetch('/api/orders', {
                 method: 'POST',
@@ -208,13 +227,13 @@ function bindOrderSubmit() {
             });
 
             const data = await response.json();
+            console.log('Order response:', data);  // 添加這行來檢查響應
 
             if (data.success) {
                 // 顯示成功頁面
                 document.querySelector('.success-page').style.display = 'flex';
                 document.getElementById('orderNumber').textContent = data.data._id;
-                document.getElementById('orderAmount').textContent = 
-                    `NT$ ${document.getElementById('sidebarTotal').textContent.replace('NT$ ', '')}`;
+                document.getElementById('orderAmount').textContent = `NT$ ${total}`;
 
                 // 清空購物車
                 await fetch('/api/cart', {
