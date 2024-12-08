@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         const data = await response.json();
-        const cartItems = data.data;
+        console.log('Cart data:', data);
+
+        // 確保我們有正確的數據結構
+        const cartItems = data.data || [];
 
         // 渲染訂單項目
         renderOrderItems(cartItems);
@@ -42,6 +45,26 @@ document.addEventListener('DOMContentLoaded', async function() {
 function renderOrderItems(items) {
     const sidebarOrderItems = document.getElementById('sidebarOrderItems');
     const orderItems = document.getElementById('orderItems');
+
+    // 確保 items 是數組
+    if (!Array.isArray(items)) {
+        console.error('Invalid items data:', items);
+        return;
+    }
+
+    // 檢查是否為空數組
+    if (items.length === 0) {
+        const emptyMessage = `
+            <div class="empty-cart">
+                <p>購物車是空的</p>
+                <a href="products.html" class="back-to-shop">去購物</a>
+            </div>
+        `;
+        sidebarOrderItems.innerHTML = emptyMessage;
+        if (orderItems) orderItems.innerHTML = emptyMessage;
+        return;
+    }
+
     const itemsHTML = items.map(item => `
         <div class="order-item">
             <img src="${item.image}" alt="${item.name}">
@@ -156,7 +179,7 @@ function updateConfirmationInfo() {
 
 function getPaymentMethodText(value) {
     const methods = {
-        credit: '信用卡付款',
+        credit: '信用��付款',
         transfer: '銀行轉帳',
         cod: '貨到付款'
     };
